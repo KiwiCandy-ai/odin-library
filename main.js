@@ -18,35 +18,45 @@ function Book(title, author, id, pages, read) {
     this.read = read;
 }
 
-addBookToLibrary('The Hobbit', 'JRR Tolkien', 'id', '265 pages', 'read')
-addBookToLibrary('War & Peace', 'Leo Tolstoy', 'id', '900 pages', 'read')
-addBookToLibrary('The Hobbit', 'JRR Tolkien', 'id', '265 pages', 'read')
-addBookToLibrary('War & Peace', 'Leo Tolstoy', 'id', '900 pages', 'read')
-addBookToLibrary('The Hobbit', 'JRR Tolkien', 'id', '265 pages', 'read')
-addBookToLibrary('War & Peace', 'Leo Tolstoy', 'id', '900 pages', 'read')
-addBookToLibrary('The Hobbit', 'JRR Tolkien', 'id', '265 pages', 'read')
-addBookToLibrary('War & Peace', 'Leo Tolstoy', 'id', '900 pages', 'read')
-
 
 function addBookToLibrary(title, author, id, pages, read) {
+    title = document.getElementById('title').value
+    author = document.getElementById('author').value
+    pages = document.getElementById('pages').value
+    read = document.getElementById('read').value
     const input = new Book(title, author, id, pages, read)
     myLibrary.push(input)
+    title.value = ''
+    author.value = ''
+    pages.value = ''
+    read.value = ''
+  
 }
+
+
 
 newButton.addEventListener('click', () => {
     dialog.showModal()
+    document.getElementById('title').value = ''
+    document.getElementById('author').value = ''
+    document.getElementById('pages').value = ''
+    document.getElementById('read').value = ''
 })
 
 addButton.addEventListener('click', () => {
     dialog.close()
     event.preventDefault()
+    addBookToLibrary()
+    addToTable()
 })
 
-     
-
-function createTable() {
-    const table = document.createElement('table')
-    table.classList.add('table')
+function addToTable() {
+    const table = document.getElementById('table')
+    let child = table.lastElementChild
+    while (child) {
+        table.removeChild(child)
+        child = table.lastElementChild
+    }
     myLibrary.forEach(item => {
         const row = document.createElement('tr')
         Object.values(item).forEach(value => {
@@ -59,4 +69,5 @@ function createTable() {
     })
     display.appendChild(table)
 }
-createTable();
+
+

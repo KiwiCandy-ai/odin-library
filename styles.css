@@ -1,15 +1,14 @@
 
 * {
     box-sizing: border-box ;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 
 }
 
 .display {
     width: 100vw;
     height: 100vw;
-
-    margin: auto
-   
+    
 }
 
 #new {
@@ -17,11 +16,61 @@
     height: 60px;
 }
 
-.table {
+#table {
     margin: auto;
+    flex-shrink: 1;
+    flex-grow: 1;
+    
+}
+
+
+
+input {
+    height: 30px;
+    margin: 10px 20px 20px 20px;
+
+}
+
+label {
+font-size: 1em;
+
+}
+
+form {
+    width: 220px;
+    text-align: center;
+    font-weight: 900;
+}
+
+form > button {
+    width:150px;
+    padding: 5px;
 }
 
 .data {
-    padding: 20px;
+    padding:10px 50px;
+
+   
 }
 
+.row {
+   border-bottom: 1px solid black;
+    box-shadow: 0px 0px 2px 0px rgb(181, 181, 181);
+  
+  
+}
+
+.remove {
+   height: 30px;
+    width: 30px;
+
+    background-image: url("https://raw.githubusercontent.com/KiwiCandy-ai/to-do-list/fd791647e2499051bee3a2d9dc56ef5636cdbb6c/bin-svgrepo-com.svg");
+background-size: contain;
+border: 1px solid grey;
+border-radius: 5px;
+}
+
+th {
+    text-transform: uppercase;
+    padding-bottom: 20px
+}

@@ -1,132 +1,150 @@
-const myLibrary = [ 
+const container = document.createElement('div')
+container.classList.add('container')
+document.body.appendChild(container)
+
+const myLibrary = [
     {title: 'The Hobbit',
     author: 'JRR Tolkien', 
     id: crypto.randomUUID(),
     pages: '256 pages',
-    read: 'not read'
+    read: 'Not read'
     },
     {title: 'War & Peace',
     author: 'Leo Tolstoy',
     id: crypto.randomUUID(),
     pages: '900 pages',
-    read: 'not read'
-    }
-]
-const dialog = document.querySelector('dialog')
-const newButton = document.querySelector('dialog + button')
-const addButton = document.querySelector('dialog button')
-const display = document.createElement('div')
-const nav = document.getElementById('nav')
-display.classList.add('display')
-document.body.appendChild(display)
-const list = document.createElement('ul')
-// list.classList.add('list')
-display.appendChild(list)
-const heading = document.createElement('h1')
-heading.textContent = 'Book Library'
-heading.classList.add('heading')
-nav.appendChild(heading)
-nav.appendChild(newButton)
-
-const checkbox = document.getElementById('read')
+    read: 'Not read'
+    }]
 
 function Book(title, author, id, pages, read) {
     this.title = title;
     this.author = author;
     this.id = crypto.randomUUID();
     this.pages = pages;
-    this.read = {}
-    if (checkbox.checked) {
-        this.read = 'read' 
-    } else {
-        this.read = 'not read'
-    }
+    this.read = read;
 }
 
 function addBookToLibrary(title, author, id, pages, read) {
-    title = document.getElementById('title').value
-    author = document.getElementById('author').value
-    pages = document.getElementById('pages').value
-    read = document.getElementById('read').value
-    const input = new Book(title, author, id, pages, read)
-    myLibrary.push(input)
-    title.value = ''
+    title = document.getElementById('Title').value
+    author = document.getElementById('Author').value
+    pages = document.getElementById('Pages').value
+    read = document.getElementById('Read?').innerHTML
+   const newBook = new Book(title, author, id, pages, read)
+   myLibrary.push(newBook)
+   title.value = ''
     author.value = ''
     pages.value = ''
     read.value = ''
-  
 }
 
-newButton.addEventListener('click', () => {
-    dialog.showModal()
-    document.getElementById('title').value = ''
-    document.getElementById('author').value = ''
-    document.getElementById('pages').value = ''
-    document.getElementById('read').value = ''
+function displayBooks(item) {
+    let child = container.lastElementChild
+    while (child) {
+        container.removeChild(child)
+        child = container.lastElementChild
+    }
+    myLibrary.forEach(book => {
+        const card = document.createElement('div')
+        const img = document.createElement('img')
+        img.src = 'https://www.pngarts.com/files/8/Blank-Book-Cover-PNG-Download-Image.png'
+        card.appendChild(img)
+        card.classList.add('card')
+        container.appendChild(card)
+        const list = document.createElement('ul')
+        card.appendChild(list)
+        const deleteBtn = document.createElement('button')
+        deleteBtn.classList.add('delete')
+        deleteBtn.textContent = 'Delete'
+        deleteBtn.addEventListener('click', (e) => {
+             myLibrary.splice(myLibrary.indexOf(item,1))
+               const parentElement = e.target.parentElement
+                parentElement.remove()
+        })
+        for (let value in book) {
+             const item = document.createElement('li')
+            if (value === 'read') {
+                const read = document.createElement('button')
+                read.classList.add('read')
+                read.textContent = `${book[value]}`
+                item.appendChild(read)
+                list.appendChild(item)
+                read.addEventListener('click', (e) => {
+                    if (read.textContent === 'Not read') {
+                        read.textContent = 'Read'
+                        book.read = 'Read'
+                    } else {
+                        read.textContent = 'Not read'
+                        book.read = 'Not read'
+                    }
+                })
+            } else {
+        const item = document.createElement('li')
+        item.innerHTML += `${book[value]}`
+        list.appendChild(item)
+            }
+    } 
+    card.appendChild(deleteBtn)
 })
+        const newBook = document.createElement('div')
+         const img = document.createElement('img')
+        img.src = 'https://www.pngarts.com/files/8/Blank-Book-Cover-PNG-Download-Image.png'
+        newBook.appendChild(img)
+        newBook.classList.add('card', 'new')
+        container.appendChild(newBook)
+        const newButton = document.createElement('button')
+        newButton.classList.add('newBtn')
+        newButton.textContent = '+'
+        newBook.appendChild(newButton)
+        newButton.addEventListener('click', createForm)
+};
 
-addButton.addEventListener('click', () => {
+displayBooks()
+
+const placeholders = ['Title', 'Author', 'Pages', 'Read?']
+
+function createForm() {
+const dialog = document.createElement('dialog')
+const form = document.createElement('form')
+const legend = document.createElement('legend')
+legend.textContent = 'New Book'
+const submitBtn = document.createElement('button')
+submitBtn.addEventListener('click', () => {
     dialog.close()
     event.preventDefault()
     addBookToLibrary()
-    addToTable()
+    displayBooks()
 })
-
-function addToTable() {
-    const table = document.getElementById('table')
-
-    let child = table.lastElementChild
-    while (child) {
-        table.removeChild(child)
-        child = table.lastElementChild
-    }
-    const headerRow = document.createElement('tr');
-
-            Object.keys(myLibrary[0]).forEach(key => {
-                const th = document.createElement('th');
-                th.appendChild(document.createTextNode(key));
-                headerRow.appendChild(th);
-            });
-            table.appendChild(headerRow);
-        myLibrary.forEach(item => {
-        const row = document.createElement('tr')
-            row.classList.add('row')
-        Object.values(item).forEach(value => {
-        const td = document.createElement('td')
-        td.classList.add('data')
-        td.appendChild(document.createTextNode(value))
-        row.appendChild(td)
-        })
-        table.appendChild(row)
-        td = document.createElement('td')
-        td.classList.add('data')
-        const status = document.createElement('input')
-        status.type = 'checkbox'
-        status.classList.add('checkbox')
-        // status.addEventListener('change', toggleStatus)
-        td.appendChild(status)
-        row.appendChild(td)
-        td = document.createElement('td')
-        td.classList.add('data')
-        const remove = document.createElement('button')
-        remove.addEventListener('click', removeTasks)
-        remove.classList.add('remove')
-        td.appendChild(remove)
-        row.appendChild(td)
-    
-    })
-    display.appendChild(table)
+submitBtn.textContent = 'Confirm'
+submitBtn.classList.add('submit')
+form.appendChild(legend)
+    placeholders.forEach(element => {
+        if (element === 'Read?') {
+             const label = document.createElement('label')
+            label.textContent = element 
+            form.appendChild(label)
+            const read = document.createElement('button')
+            read.textContent = 'Not Read'
+            read.classList.add('read', 'formnew')
+            read.setAttribute('id', `${element}`)
+            read.addEventListener('click', () => {
+                if (read.textContent === 'Not Read') {
+                    read.textContent = 'Read' 
+                } else {
+                    read.textContent = 'Not Read' 
+                }
+            })
+            form.appendChild(read)
+        } else {
+     const label = document.createElement('label')
+     label.textContent = element   
+     form.appendChild(label)
+    const input = document.createElement('input')
+    input.setAttribute('id', `${element}`)
+    input.required = true
+    form.appendChild(input)
+}});
+dialog.appendChild(form)
+form.appendChild(submitBtn)
+document.body.appendChild(dialog)
+dialog.showModal()
 }
-
-const remove = document.querySelectorAll('.remove')
-addToTable()
-
-function removeTasks(e) {
-    const parentElement = this.parentElement
-    parentElement.remove()
-}
-
-
-
-
-
